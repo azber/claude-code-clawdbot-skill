@@ -5,7 +5,11 @@ description: "Run Claude Code (Anthropic) from this host via the `claude` CLI (A
 
 # Claude Code (Clawdbot)
 
-Use the locally installed **Claude Code** CLI to run “headless” prompts (non-interactive) against the current codebase.
+Use the locally installed **Claude Code** CLI reliably.
+
+This skill supports two execution styles:
+- **Headless mode** (non-interactive): best for normal prompts and structured output.
+- **Interactive mode (tmux)**: required for **slash commands** like `/speckit.*` (Spec Kit), which can hang or be killed when run via headless `-p`.
 
 This skill is for **driving the Claude Code CLI**, not the Claude API directly.
 
@@ -61,9 +65,27 @@ Example: allow read/edit + bash:
 
 ## Notes (important)
 
-- Claude Code sometimes expects a TTY. The wrapper script runs it through a pseudo-terminal using `script(1)` for reliability.
+- Claude Code sometimes expects a TTY.
+- **Headless**: this wrapper uses `script(1)` to force a pseudo-terminal.
+- **Slash commands** (e.g. `/speckit.*`) are best run in **interactive** mode; this wrapper can start an interactive Claude Code session in **tmux**.
 - Use `--permission-mode plan` when you want read-only planning.
 - Keep `--allowedTools` narrow (principle of least privilege), especially in automation.
+
+## Interactive mode (tmux)
+
+If your prompt contains lines starting with `/` (slash commands), the wrapper defaults to **auto → interactive**.
+
+Example:
+
+```bash
+./scripts/claude_code_run.py \
+  --mode auto \
+  --permission-mode acceptEdits \
+  --allowedTools "Bash,Read,Edit,Write" \
+  -p $'/speckit.constitution ...\n/speckit.specify ...\n/speckit.plan ...\n/speckit.tasks\n/speckit.implement'
+```
+
+It will print tmux attach/capture commands so you can monitor progress.
 
 ## Bundled script
 
