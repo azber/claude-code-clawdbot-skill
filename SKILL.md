@@ -175,6 +175,42 @@ Practical rule:
 In automation environments, backgrounded `vite` / `ngrok` processes can get SIGKILL.
 Prefer running them in a managed background session (Clawdbot exec background) or tmux, and explicitly stop them when done.
 
+## OpenSpec workflow (opsx)
+
+OpenSpec is another spec-driven workflow (like Spec Kit) powered by slash commands (e.g. `/opsx:*`).
+In practice it has the same reliability constraints:
+- Prefer **interactive tmux mode** for `/opsx:*` commands (avoid headless `-p` for the whole flow).
+
+### Setup (per machine)
+
+Install CLI:
+```bash
+npm install -g @fission-ai/openspec@latest
+```
+
+### Setup (per project)
+
+Initialize OpenSpec **with tool selection** (required):
+```bash
+openspec init --tools claude
+```
+
+Tip: disable telemetry if desired:
+```bash
+export OPENSPEC_TELEMETRY=0
+```
+
+### Recommended end-to-end command sequence
+
+Inside Claude Code (interactive):
+1) `/opsx:onboard`
+2) `/opsx:new <change-name>`
+3) `/opsx:ff` (fast-forward: generates proposal/design/specs/tasks)
+4) `/opsx:apply` (implements tasks)
+5) `/opsx:archive` (optional: archive finished change)
+
+If the UI prompts you for project type/stack, answer explicitly (e.g. “Web app (HTML/JS) with localStorage”).
+
 ## Bundled script
 
 - `scripts/claude_code_run.py`: wrapper that runs the local `claude` binary with a pseudo-terminal and forwards flags.
