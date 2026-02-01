@@ -65,6 +65,11 @@ Example: allow read/edit + bash:
 
 ## Notes (important)
 
+- **After correcting Claude Code's mistakes**: Always instruct Claude Code to run:
+  > "Update your CLAUDE.md so you don't make that mistake again."
+  
+  This ensures Claude Code records lessons learned and avoids repeating the same errors.
+
 - Claude Code sometimes expects a TTY.
 - **Headless**: this wrapper uses `script(1)` to force a pseudo-terminal.
 - **Slash commands** (e.g. `/speckit.*`) are best run in **interactive** mode; this wrapper can start an interactive Claude Code session in **tmux**.
